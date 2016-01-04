@@ -1,10 +1,16 @@
-/********************************************************/
-/* Function to retrieve the data from the in-out        */
-/* date form                                            */
-/********************************************************/
+$(document).ready(function(){
+	jQuery('.numbersOnly').keyup(function () { 
+    	this.value = this.value.replace(/[^0-9\.]/g,'');
+	});
+});
+
+
 //AJAX
 
-// jquery extend function
+/********************************************************/
+/* Function pass data throw pages with post             */
+/*                                                      */
+/********************************************************/
 $.extend(
 {
     redirectPost: function(location, args)
@@ -17,15 +23,18 @@ $.extend(
     }
 });
 
-
+/********************************************************/
+/* Function to retrieve the data from the in-out        */
+/* date form                                            */
+/********************************************************/
 function getData() {
-	//var campo = document.getElementById("");
 
+	var result = verifyData();
+
+	if(result){
 	//the data
 	var data = {
-		user : "demo1014",
-		pass : "test1014",
-		
+			numRooms : $("#numRooms").val(),
 			inDate : $("#enterDate").val(),
 			outDate : $("#departDate").val(),
 			roomClass : $("#roomClass").val(),
@@ -39,31 +48,100 @@ function getData() {
 	//the Ajax call
 	$.post("reservacion/disponibility.php",message,
 	        statusDisponibility);
+	}
+	else{
+		$("#message").html("Debes Completar todos los campos :)");
+	}
+	
 }
 
-function statusDisponibility(resultado) {	    
-	    if (resultado.indexOf("problema")==1) {
-			 //alert(resultado);
-			 $("#message").html(resultado);//display the error
+function statusDisponibility(resultado) {
+
+	    if (resultado.indexOf("Ocurrio") == 0) {
+	    	$("#continue").hide();
+			alert(resultado);
+			//$("#message").html(resultado);//display the error
 		} 		 
-		else if (resultado.indexOf("No existe")==1){
-			//alert(resultado);
-			 $("#message").html(resultado);
+		else if (resultado.indexOf("No existe") == 0){
+			$("#continue").hide();
+			alert(resultado);
+			 //$("#message").html(resultado);
+		}else if(resultado.indexOf("Error") == 0){
+			$("#continue").hide();
+			alert(resultado);
 		}else{
 			var s = resultado.split(" ");
-
+			alert("Encontramos habitaciones disponibles!");
 			$("#continue").show();
 			$("#message").html("");
-			$("#message").html("Tarifa = "+s[0]+" Tarifa total "+s[1]);
-			//$.get( "test.php", { data: resultado, time: "2pm" } );
-			//var redirect = 'personal_data.php?id=2';
-			//$.redirectPost(redirect, {x: 'example', y: 'abc'});
-			//$(location).attr('href', 'personal_data.php?'+resultado);
-			//jQuery(location).attr('href', 'personal_data.php?'+resultado);
+			$("#message").html("Tarifa por noche = "+s[0]+" Tarifa total = "+s[1]);
+			
 		}
     
 }//end function statusDisponibility
 
-function test(){
-	alert("Continuar really?");
+function sendEmail(){
+
+	alert("Seras redireccionado a nuestra pagina de contacto");
+
+	var url = "http://computeczacatecas.com/contacto-3/"; 
+	$(location).attr('href',url);
+
+	//
+	/*var data = {
+
+		userName : $("#userName").val(),
+		userEmail : $("#userEmail").val(),
+		userPhone : $("#userPhone").val(),
+			inDate : $("#enterDate").val(),
+			outDate : $("#departDate").val(),
+			roomClass : $("#roomClass").val(),
+			numPersons : $("#numPersons").val(),
+			numKids : $("#numKids").val()
+	}
+	//alert("Hola");
+	var message="info="+
+	         escape(JSON.stringify(data))
+
+	//the Ajax call
+	$.post("reservacion/sendEmails.php",message,
+	        statusSend);*/
+	
 }
+
+function statusSend(resultado){
+	alert(resultado);
+	//$("#message").html(resultado);
+}
+
+/********************************************************/
+/* Function to verify the data from the reservation     */
+/* form                                                 */
+/********************************************************/
+ function verifyData(){
+
+ 	var inDate = $("#enterDate").val();
+ 	var outDate = $("#departDate").val();
+ 	var numPersons = $("#numPersons").val();
+ 	var numKids = $("#numRooms").val();
+ 	var numKids = $("#numKids").val();
+
+ 	if(!inDate){
+ 		return false;
+ 	}
+ 	if(!outDate){
+ 		return false;
+ 	}
+ 	if(!numPersons){
+ 		return false;
+ 	}
+ 	if(!numRooms){
+ 		return false;
+ 	}
+ 	if(!numKids){
+ 		return false;
+ 	}
+
+
+ 	return true;
+ }

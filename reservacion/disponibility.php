@@ -2,9 +2,22 @@
 
 $text = "";
 
+//credentials
+
+$hotelId = 14;
+$user = "ARPLATA";
+$pass = "ArrPo2015";
+
+/*$hotelId = 2;
+$user = "demo1014";
+$pass = "test1014";*/
+
 //url
 $url_web_server = "http://www.hotelero.com.mx:18005/HoteleroWSG/SisHotelReservarWSG.asmx?WSDL";
 $url_location = "http://www.hotelero.com.mx:18005/HoteleroWSG/SisHotelReservarWSG.asmx";
+
+
+try{
 
 //Soap client
 $client = new SoapClient($url_web_server, array(
@@ -12,8 +25,8 @@ $client = new SoapClient($url_web_server, array(
 								           'exceptions'=>true,
 								           'features'=>SOAP_SINGLE_ELEMENT_ARRAYS,
 								           'location' => $url_location,
-								           'Usuario' => "demo1014", 
-								           'Password' => "test1014"
+								           'Usuario' => $user, 
+								           'Password' => $pass
 								        )
         );
 
@@ -28,9 +41,9 @@ $client = new SoapClient($url_web_server, array(
 	$d2 = new DateTime($message['outDate']);
 	$d2 = $d2 -> format("c");
 
-	$GetDisponibilidad = array('HotelID' => 2,
-							 'Usuario' => $message['user'], 
-							 'Password' => $message['pass'],
+	$GetDisponibilidad = array('HotelID' => $hotelId,
+							 'Usuario' => $user,
+							 'Password' => $pass,
 							  'oReq' => array('FechaEntrada' => $d1,
 												'FechaSalida' => $d2,
 												'ClaseHabitacion' => intval($message['roomClass']),
@@ -62,7 +75,7 @@ $client = new SoapClient($url_web_server, array(
 		$msgError = $result -> GetDisponibilidadResult -> MsgError; //get the message error
 		echo "Ocurrio un problema ".$msgError;
 	}
-	else if($disponibles == false){//the soap request went all good
+	else if($disponibles == false){//the soap request went all good, but theres no disponibility
 
 		echo "No existe disponibilidad para las fechas seleccionadas";
 
@@ -74,26 +87,9 @@ $client = new SoapClient($url_web_server, array(
 		echo $tarifa." ".$tarifaTotal;
 	}
 
-	/*$result = objToArray($result);
+} catch (SoapFault $fault) {
+	echo "Error ".$fault->faultcode." ".$fault->faultstring;
+    	//trigger_error("SOAP Fault: (faultcode: {$fault->faultcode}, faultstring: {$fault->faultstring})", E_USER_ERROR);
+}//end catch
 
-	echo $result;
-
-	function objToArray($obj=false)  {
-    if (is_object($obj))
-        $obj= get_object_vars($obj);
-    if (is_array($obj)) {
-        return array_map(__FUNCTION__, $obj);
-    } else {
-        return $obj;
-    }
-    
-	}*/
-
-
-
-	//http://stackoverflow.com/questions/3780543/how-to-pass-an-array-into-a-php-soapclient-call
-	//http://stackoverflow.com/questions/21597364/how-are-date-and-datetime-supposed-to-be-serialized-soap-xml-messages
-	// use SOAP::DateTime; my $soap_datetime = ConvertDate($arbitrary_date);
-	//http://osarogabriel.blogspot.mx/2014/03/a-complete-php-soap-client-example.html
-	//http://stackoverflow.com/questions/13175803/soap-error-missing-parameter-despite-given-arguments
 ?>

@@ -1,0 +1,114 @@
+<html>
+
+
+	<head>
+		<title>Reservaciones</title>
+
+		<script type="text/javascript" src="js/jquery-1.11.3.js"></script>
+		<script type="text/javascript" src="js/reservation.js"></script>
+		<script type="text/javascript" src="js/jquery-ui-1.11.4/jquery-ui.js"></script>
+
+
+		<!--jqueryUI-->
+		<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+
+
+		<!-- Date Pickers-->
+		<script type="text/javascript">
+			$(function() {
+	    		$( "#enterDate" ).datepicker({ minDate: -1});
+	    		$( "#departDate").datepicker({ minDate: -1});
+	  		});
+		</script>
+
+		<style type="text/css">
+			.rcorners2 {
+			    border-radius: 25px;
+			    border: 2px solid #73AD21;
+			    padding: 20px; 
+			    width: 400px;
+			    /*height: 150px; */
+			}
+		</style>
+
+
+
+	</head>
+
+
+<body>
+
+<div id="reservationForm" class="rcorners2">
+
+	<h3>Verifica reservaci&oacute;n</h3>
+
+	<form action="http://computeczacatecas.com/contacto-3/">
+
+		<p>Arraving Date :
+			<input type="text" id="enterDate" placeholder="Llegada" readonly required/>
+		</p>
+
+		<p>Departing Date :
+			<input type="text" id="departDate" placeholder="Salida" readonly/>
+		</p>
+
+		<p>
+			Clase de habitaci&oacute;n
+			<select id="roomClass">
+				<option value="1"> STANDARD                      
+				<option value="2"> JUNIOR SUITE                         
+				<option value="3"> SUITE
+			</select>
+		</p>
+
+		<p>
+			N&uacute;mero de Habitaciones :
+			<input type="number" id="numRooms" maxlength="2" size="2" />
+		</p>
+
+		<p>
+			N&uacute;mero de Personas
+			<input type="number" id="numPersons" maxlength="2" size="2"/>
+		</p>
+
+		<p>
+			N&uacute;mero de Ni&ntilde;os
+			<input type="number" id="numKids" maxlength="2" size="2"/>
+		</p>
+
+		<p>
+			<input type="button" value="Verificar" onclick="getData()">
+		</p>
+
+		<div id="message">
+
+		</div>
+
+		
+		<div style="display: none;"  id="continue">
+
+		<!-- <p>Nombre:
+			<input type="text" id="userName" placeholder="Nombre"/>
+		</p>
+
+		<p>Telefono:
+			<input type="tel" id="userPhone" placeholder="Telefono" class="numbersOnly"/>
+		</p>
+
+		<p>Email:
+			<input type="email" id="userEmail" placeholder="Email"/>
+		</p>	-->
+
+			<p>
+				<input type="submit" onclick="sendEmail()" value="Continuar?" />
+			</p>
+
+		</div>
+
+	</form>
+</div>
+
+</body>
+
+
+</html>
